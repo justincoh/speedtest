@@ -53,7 +53,7 @@ const runSpeedtest = () => {
 };
 
 const addToResults = (stringToEcho) => {
-    exec(`echo "\n${stringToEcho}" >> results.csv`, (err, stdout, stderr) => {});
+    exec(`echo "${stringToEcho}" >> results.csv`, (err, stdout, stderr) => {});
 }
 
 // Run on start
