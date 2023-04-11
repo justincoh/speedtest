@@ -1,0 +1,55 @@
+{
+    "type": "result",
+    "timestamp": "2023-04-09T17:31:14Z",
+    "ping": {
+        "jitter": 1.161,
+        "latency": 9.912,
+        "low": 8.746,
+        "high": 10.689
+    },
+    "download": {
+        "bandwidth": 20940965,
+        "bytes": 204671904,
+        "elapsed": 9615,
+        "latency": {
+            "iqm": 20.145,
+            "low": 9.893,
+            "high": 237.090,
+            "jitter": 11.322
+        }
+    },
+    "upload": {
+        "bandwidth": 25712125,
+        "bytes": 301182384,
+        "elapsed": 12629,
+        "latency": {
+            "iqm": 15.454,
+            "low": 5.116,
+            "high": 385.312,
+            "jitter": 18.316
+        }
+    },
+    "packetLoss": 0,
+    "isp": "Verizon Fios",
+    "interface": {
+        "internalIp": "192.168.1.18",
+        "name": "en0",
+        "macAddr": "C4:35:D9:82:B3:8A",
+        "isVpn": false,
+        "externalIp": "108.50.243.193"
+    },
+    "server": {
+        "id": 49834,
+        "host": "speedtest1.nyc1.nitelusa.net",
+        "port": 8080,
+        "name": "Nitel",
+        "location": "New York, NY",
+        "country": "United States",
+        "ip": "96.8.96.254"
+    },
+    "result": {
+        "id": "07bc33f4-cd4a-44c7-b1a8-2accfc4b859c",
+        "url": "https://www.speedtest.net/result/c/07bc33f4-cd4a-44c7-b1a8-2accfc4b859c",
+        "persisted": true
+    }
+}

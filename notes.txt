@@ -1,0 +1,16 @@
+speedtest --format=json
+
+The naming conventions between CSV and JSON output change, which is confusing
+
+The JSON format contains much more (and needed) data than the csv format
+best bet is probably to run this with the --format=json, then parse the results and write them to a csv
+
+to go from byte to mbit is * .000008 or 8e-6
+
+you'll want result.download.bandwidth
+result.upload.bandwidth
+packetLoss maybe
+result.result.url
+result.timestamp
+result.isp
+result.server.location
