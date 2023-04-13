@@ -13,45 +13,57 @@ const DAY_MAP = [
     "Saturday",
 ];
 
+const hoursMinutesSeconds = (dateObj) => 
+    `${dateObj.getHours()}:${dateObj.getMinutes()}:${dateObj.getSeconds()}`;
+
 const runSpeedtest = () => {
-    console.log("Running: ", new Date().toLocaleString())
+    const now = new Date();
+    console.log("Running: ", now.toLocaleString())
+
+    // run the speedtest command line command
     exec('speedtest --format=json', (err, stdout, stderr) => {
         if (err) {
             // node couldn't execute the command
+            console.log("Node failure, you really shouldn't see this log");
+            return;
+        }
+
+        if (stderr) {
+            console.log("error running command: ", stderr);
+            const dataToSave = [
+                now.toISOString(), DAY_MAP[now.getDay()], hoursMinutesSeconds(now), 0, 0, 0, "error", "error", "error", "error",
+            ];
+            addToResults(dataToSave.join(','));
             return;
         }
         
         const result = JSON.parse(stdout);
         const timeStamp = new Date(result.timestamp);
-        const hoursMinutesSeconds = `${timeStamp.getHours()}:${timeStamp.getMinutes()}:${timeStamp.getSeconds()}`;
         const downloadSpeed = result.download.bandwidth * BYTE_TO_MBIT;
         const uploadSpeed = result.upload.bandwidth * BYTE_TO_MBIT;
 
-        // add day of weeek?
         const dataToSave = [
-            timeStamp.toISOString(),
-            DAY_MAP[timeStamp.getDay()],
-            hoursMinutesSeconds,
-            downloadSpeed.toFixed(2),
-            uploadSpeed.toFixed(2),
-            result.packetLoss,
-            result.isp,
-            result.server.host,
-            result.server.location.replace(",", ""),
-            result.result.url,
-        ]
+            timeStamp.toISOString(), // timestamp
+            DAY_MAP[timeStamp.getDay()], // day of week
+            hoursMinutesSeconds(timeStamp), // HH:MM:SS
+            downloadSpeed.toFixed(2), // download speed in Mbits
+            uploadSpeed.toFixed(2), // upload speed in Mbits
+            result.packetLoss, // packet loss
+            result.isp, // ISP
+            result.server.host, // server host
+            result.server.location.replace(",", ""), // location of server
+            result.result.url, // link to speedtest result
+        ];
         
+        // make this all one comma separated string
         const nextLineOfCsv = dataToSave.join(',');
 
         addToResults(nextLineOfCsv);
-        if (stderr) {
-            console.log("error running command: ", stderr);
-        } else {
-            console.log("Run complete")
-        }
+        console.log("Run complete");
     });
 };
 
+// Append a new line to the existing results csv
 const addToResults = (stringToEcho) => {
     exec(`echo "${stringToEcho}" >> results.csv`, (err, stdout, stderr) => {});
 }
