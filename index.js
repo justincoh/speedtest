@@ -18,20 +18,27 @@ const hoursMinutesSeconds = (dateObj) =>
 
 const runSpeedtest = () => {
     const now = new Date();
-    console.log("Running: ", now.toLocaleString())
+
+    // use stdout so the success log is on the same line as the running log
+    process.stdout.write(`Running: ${now.toLocaleString()}`);
 
     // run the speedtest command line command
     exec('speedtest --format=json', (err, stdout, stderr) => {
         if (err) {
             // node couldn't execute the command
             console.log("Node failure, you really shouldn't see this log");
+            console.log(err);
+            const dataToSave = [
+                now.toISOString(), DAY_MAP[now.getDay()], hoursMinutesSeconds(now), 0, 0, 0, "Comcast Cable", "error", "error", "error",
+            ];
+            addToResults(dataToSave.join(','));
             return;
         }
 
         if (stderr) {
             console.log("error running command: ", stderr);
             const dataToSave = [
-                now.toISOString(), DAY_MAP[now.getDay()], hoursMinutesSeconds(now), 0, 0, 0, "error", "error", "error", "error",
+                now.toISOString(), DAY_MAP[now.getDay()], hoursMinutesSeconds(now), 0, 0, 0, "Comcast Cable", "error", "error", "error",
             ];
             addToResults(dataToSave.join(','));
             return;
@@ -48,7 +55,7 @@ const runSpeedtest = () => {
             hoursMinutesSeconds(timeStamp), // HH:MM:SS
             downloadSpeed.toFixed(2), // download speed in Mbits
             uploadSpeed.toFixed(2), // upload speed in Mbits
-            result.packetLoss, // packet loss
+            result.packetLoss?.toFixed(2), // packet loss
             result.isp, // ISP
             result.server.host, // server host
             result.server.location.replace(",", ""), // location of server
@@ -59,7 +66,7 @@ const runSpeedtest = () => {
         const nextLineOfCsv = dataToSave.join(',');
 
         addToResults(nextLineOfCsv);
-        console.log("Run complete");
+        process.stdout.write(" - Done\n");
     });
 };
 
