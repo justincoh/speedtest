@@ -1,25 +1,52 @@
+import csv
 import psycopg2
+from dotenv import dotenv_values
 
-# conn = psycopg2.connect("dbname=user=")
+ENV_VARS = dotenv_values(".env")
 
-# test_insert = "2023-04-16T20:32:43.000Z,Sunday,16:32:43,527.81,23.72,4.76,Comcast Cable,speedtest.is.cc,Secaucus NJ,https://www.speedtest.net/result/c/19057bee-7d7c-41e9-86c1-fb106f3f4dbd"
-as_an_array = [
-    '2023-04-16T20:32:43.000Z',
-    'Sunday',
-    '16:32:43',
-    '527.81',
-    '23.72',
-    '4.76',
-    'Comcast Cable',
-    'speedtest.is.cc',
-    'Secaucus NJ',
-    'https://www.speedtest.net/result/c/19057bee-7d7c-41e9-86c1-fb106f3f4dbd'
-]
-# print(conn)
-cur = conn.cursor()
-cur.executemany(
-    "INSERT INTO results VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
-    [as_an_array, as_an_array]
-)
-conn.commit()
-conn.close()
+# def read_results():
+#     with open("results.csv", "r") as infile:
+#         csv_reader = csv.DictReader(infile)
+#         return [row.values() for row in csv_reader]
+
+def read_results():
+    with open("results.csv", "r") as infile:
+        reader = csv.reader(infile)
+
+        # Skip the header row
+        next(reader)
+
+        # This has to be tuple because psycopg2 doesn't like lists
+        return [tuple(row) for row in reader]
+
+
+def write_results(results):
+    conn = psycopg2.connect(f"dbname={ENV_VARS['DB_NAME']} user={ENV_VARS['DB_USER']}")
+    cur = conn.cursor()
+    cur.executemany(
+        "INSERT INTO results ( \
+            timestamp, \
+            day_of_week,time, \
+            download_mbps, \
+            upload_mbps, \
+            packet_loss, \
+            isp, \
+            server_host, \
+            server_location, \
+            share_url \
+        ) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+        (results)
+    )
+    conn.commit()
+    conn.close()
+
+def main():
+    results = read_results()
+    import ipdb;ipdb.set_trace()
+    try:
+        write_results(results)
+    except Exception as e:
+        import ipdb; ipdb.set_trace()
+        print("damn")
+
+main()

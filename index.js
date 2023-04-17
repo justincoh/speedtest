@@ -1,4 +1,5 @@
 const { exec } = require('child_process');
+const { writeValues } = require('./db_test');
 
 const BYTE_TO_MBIT = .000008;
 
@@ -31,7 +32,8 @@ const runSpeedtest = () => {
             const dataToSave = [
                 now.toISOString(), DAY_MAP[now.getDay()], hoursMinutesSeconds(now), 0, 0, 0, "Comcast Cable", "error", "error", "error",
             ];
-            addToResults(dataToSave.join(','));
+            writeValues(dataToSave);
+            // addToResults(dataToSave.join(','));
             return;
         }
 
@@ -40,7 +42,8 @@ const runSpeedtest = () => {
             const dataToSave = [
                 now.toISOString(), DAY_MAP[now.getDay()], hoursMinutesSeconds(now), 0, 0, 0, "Comcast Cable", "error", "error", "error",
             ];
-            addToResults(dataToSave.join(','));
+            wreiteValues(dataToSave);
+            // addToResults(dataToSave.join(','));
             return;
         }
         
@@ -63,17 +66,18 @@ const runSpeedtest = () => {
         ];
         
         // make this all one comma separated string
-        const nextLineOfCsv = dataToSave.join(',');
+        // const nextLineOfCsv = dataToSave.join(',');
 
-        addToResults(nextLineOfCsv);
+        // addToResults(nextLineOfCsv);
+        writeValues(dataToSave);
         process.stdout.write(" - Done\n");
     });
 };
 
 // Append a new line to the existing results csv
-const addToResults = (stringToEcho) => {
-    exec(`echo "${stringToEcho}" >> results.csv`, (err, stdout, stderr) => {});
-}
+// const addToResults = (stringToEcho) => {
+//     exec(`echo "${stringToEcho}" >> results.csv`, (err, stdout, stderr) => {});
+// }
 
 // Run on start
 runSpeedtest();

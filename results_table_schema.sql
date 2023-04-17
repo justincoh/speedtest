@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS results (
     id SERIAL NOT NULL PRIMARY KEY,
-    timestamp TIMESTAMP NOT NULL,
+    timestamp TIMESTAMP NOT NULL UNIQUE,
     day_of_week VARCHAR(9) NOT NULL,
     time VARCHAR(8) NOT NULL,
     download_mbps FLOAT NOT NULL,
