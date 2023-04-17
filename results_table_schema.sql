@@ -1,4 +1,5 @@
 CREATE TABLE IF NOT EXISTS results (
+    id SERIAL NOT NULL PRIMARY KEY,
     timestamp TIMESTAMP NOT NULL,
     day_of_week VARCHAR(9) NOT NULL,
     time VARCHAR(8) NOT NULL,
