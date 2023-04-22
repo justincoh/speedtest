@@ -42,7 +42,7 @@ const runSpeedtest = () => {
             const dataToSave = [
                 now.toISOString(), DAY_MAP[now.getDay()], hoursMinutesSeconds(now), 0, 0, 0, "Comcast Cable", "error", "error", "error",
             ];
-            wreiteValues(dataToSave);
+            writeValues(dataToSave);
             // addToResults(dataToSave.join(','));
             return;
         }
