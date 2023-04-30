@@ -26,14 +26,12 @@ const runSpeedtest = () => {
     // run the speedtest command line command
     exec('speedtest --format=json', (err, stdout, stderr) => {
         if (err) {
-            // node couldn't execute the command
-            console.log("Node failure, you really shouldn't see this log");
+            console.log("Command Failure:");
             console.log(err);
             const dataToSave = [
                 now.toISOString(), DAY_MAP[now.getDay()], hoursMinutesSeconds(now), 0, 0, 0, "Comcast Cable", "error", "error", "error",
             ];
             writeValues(dataToSave);
-            // addToResults(dataToSave.join(','));
             return;
         }
 
@@ -43,7 +41,6 @@ const runSpeedtest = () => {
                 now.toISOString(), DAY_MAP[now.getDay()], hoursMinutesSeconds(now), 0, 0, 0, "Comcast Cable", "error", "error", "error",
             ];
             writeValues(dataToSave);
-            // addToResults(dataToSave.join(','));
             return;
         }
         
@@ -65,22 +62,13 @@ const runSpeedtest = () => {
             result.result.url, // link to speedtest result
         ];
         
-        // make this all one comma separated string
-        // const nextLineOfCsv = dataToSave.join(',');
-
-        // addToResults(nextLineOfCsv);
         writeValues(dataToSave);
         process.stdout.write(" - Done\n");
     });
 };
 
-// Append a new line to the existing results csv
-// const addToResults = (stringToEcho) => {
-//     exec(`echo "${stringToEcho}" >> results.csv`, (err, stdout, stderr) => {});
-// }
-
 // Run on start
 runSpeedtest();
 
-// And then run the speedtest every 5 minutes
+// And then run every 5 minutes
 setInterval(runSpeedtest, 300000);
