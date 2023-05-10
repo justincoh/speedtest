@@ -20,6 +20,11 @@ const hoursMinutesSeconds = (dateObj) =>
 const runSpeedtest = () => {
     const now = new Date();
 
+    if (now.getHours() < 8 || now.getHours() > 21) {
+        console.log(`${now.toLocaleString()} is outside of 8am-10pm, skipping`);
+        return;
+    }
+
     // use stdout so the success log is on the same line as the running log
     process.stdout.write(`Running: ${now.toLocaleString()}`);
 
